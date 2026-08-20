@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package orders;
+
+option go_package = "github.com/lucas/clean-orders-challenge/proto;pb";
+
+service OrderService {
+  rpc ListOrders(ListOrdersRequest) returns (ListOrdersResponse);
+}
+
+message ListOrdersRequest {}
+
+message Order {
+  string id = 1;
+  double price = 2;
+  double tax = 3;
+  double final_price = 4;
+}
+
+message ListOrdersResponse {
+  repeated Order orders = 1;
+}

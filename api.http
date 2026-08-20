@@ -1,0 +1,30 @@
+### Criar Order via REST
+POST http://localhost:8000/order
+Content-Type: application/json
+
+{
+  "price": 100.50,
+  "tax": 10.25
+}
+
+### Listar Orders via REST
+GET http://localhost:8000/order
+
+### Criar Order via GraphQL
+POST http://localhost:8080/query
+Content-Type: application/json
+
+{
+  "query": "mutation { createOrder(input: { price: 200.00, tax: 20.00 }) { id price tax finalPrice } }"
+}
+
+### Listar Orders via GraphQL
+POST http://localhost:8080/query
+Content-Type: application/json
+
+{
+  "query": "query { listOrders { id price tax finalPrice } }"
+}
+
+### Listar Orders via gRPC usando grpcurl
+# grpcurl -plaintext localhost:50051 orders.OrderService/ListOrders

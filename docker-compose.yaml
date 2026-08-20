@@ -1,0 +1,37 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: orders_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: orders
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: .
+    container_name: orders_app
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_DSN: root:root@tcp(mysql:3306)/orders?parseTime=true
+      WEB_PORT: 8000
+      GRAPHQL_PORT: 8080
+      GRPC_PORT: 50051
+    ports:
+      - "8000:8000"
+      - "8080:8080"
+      - "50051:50051"
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
